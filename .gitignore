@@ -1,0 +1,8 @@
+# Environment variables and virtual environments
+.env
+.venv
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.pyc
+.idea
