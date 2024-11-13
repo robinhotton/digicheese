@@ -3,16 +3,16 @@ from typing import Optional
 
 
 class ClientBase(BaseModel):
-	nomcli: Optional[str]
-	prenomcli: Optional[str]
-	genrecli: Optional[str]
-	adresse1cli: Optional[str]
-	adresse2cli: Optional[str]
-	adresse3cli: Optional[str]
-	telcli: Optional[str]
-	emailcli: Optional[str]
-	portcli: Optional[str]
-	newsletter: Optional[int]
+	nomcli: Optional[str] = None
+	prenomcli: Optional[str] = None
+	genrecli: Optional[str] = None
+	adresse1cli: Optional[str] = None
+	adresse2cli: Optional[str] = None
+	adresse3cli: Optional[str] = None
+	telcli: Optional[str] = None
+	emailcli: Optional[str] = None
+	portcli: Optional[str] = None
+	newsletter: Optional[int] = None
 
 
 class ClientCreate(ClientBase):

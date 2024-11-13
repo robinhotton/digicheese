@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.repository.client_repository import ClientRepository
+from ..repository import ClientRepository
 
 
 class ClientService:
