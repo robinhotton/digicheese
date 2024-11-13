@@ -5,5 +5,5 @@ from .routers import router
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(prefix="/api/v1")
+app = FastAPI()
 app.include_router(router)

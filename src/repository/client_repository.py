@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from src.models.client_model import Client
+from ..models import Client
+from ..schemas import ClientCreate, ClientUpdate
 
 
 class ClientRepository:
@@ -12,16 +13,18 @@ class ClientRepository:
         return db.query(Client).filter(Client.codcli == client_id).first()
 
 
-    def create_client(self, db: Session, client_data: dict):
-        new_client = Client(**client_data)
+    def create_client(self, db: Session, client_data: ClientCreate):
+        new_client = Client(**client_data.model_dump())
         db.add(new_client)
         db.commit()
         db.refresh(new_client)
         return new_client
 
 
-    def update_client(self, db: Session, client_id: int, client_data: dict):
+    def update_client(self, db: Session, client_id: int, client_data: ClientUpdate):
+        client_data = client_data.model_dump(exclude_unset=True)
         client = self.get_client_by_id(db, client_id)
+        
         if client:
             for key, value in client_data.items():
                 setattr(client, key, value)
