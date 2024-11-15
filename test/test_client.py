@@ -1,10 +1,12 @@
 from fastapi.testclient import TestClient
 from src.main import app
 
+
 client = TestClient(app)
 
 # Variables globales
 created_id = None
+
 cli_data = {
     "genre": "M",
     "nom": "Doe",
@@ -14,6 +16,7 @@ cli_data = {
     "email": "john.doe@gmail.com",
     "newsletter": 0
 }
+
 update_cli = {
     "genre": "F",
     "nom": "Doe",
@@ -24,6 +27,7 @@ update_cli = {
     "newsletter": 1
 }
 
+
 def assert_client_data(data, expected_data):
     """Fonction pour vérifier que les données du client dans la réponse sont correctes."""
     assert data["genre"] == expected_data["genre"]
@@ -33,6 +37,7 @@ def assert_client_data(data, expected_data):
     assert data["tel"] == expected_data["tel"]
     assert data["email"] == expected_data["email"].lower()
     assert data["newsletter"] == expected_data["newsletter"]
+
 
 def test_get_all_clients():
     response = client.get("/client/")
