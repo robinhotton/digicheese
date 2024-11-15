@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from ..repository import ClientRepository
+from ..repositories import ClientRepository
 from ..schemas import ClientCreate, ClientUpdate
 
 
