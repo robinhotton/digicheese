@@ -5,3 +5,4 @@ pydantic[email]
 pymysql
 python-dotenv
 httpx
+pytest
