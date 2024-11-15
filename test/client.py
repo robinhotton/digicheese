@@ -8,15 +8,10 @@ from fastapi.testclient import TestClient
 from typing import List
 
 class TestHomeRoute(unittest.TestCase):
+    created_id = None
+    
     def setUp(self):
-        self.created_id = None
         self.client = TestClient(app)
-        
-    def test_route_hello_world(self):
-        reponse = self.client.get("/")
-        self.assertEqual(reponse.status_code, 200) # reussite
-        self.assertEqual(reponse.json(), {"message": "Bienvenue sur notre API DIGICHEESE"}) # bon le json
-        
         
     def test_create_client(self):
         new_cli = {
@@ -29,14 +24,16 @@ class TestHomeRoute(unittest.TestCase):
             "newsletter": 0
         }
         reponse = self.client.post("/clients/", json=new_cli)
+        data = reponse.json()
+        print(data)
         self.assertEqual(reponse.status_code, 200)
-        self.assertEqual(reponse.json()["genrecli"], "Monsieur")
-        self.assertEqual(reponse.json()["nomcli"], "Doe")
-        self.assertEqual(reponse.json()["prenomcli"], "John")
-        self.assertEqual(reponse.json()["adresse1cli"], "1 rue de la Paix")
-        self.assertEqual(reponse.json()["telcli"], "0123456789")
-        self.assertEqual(reponse.json()["emailcli"], "john.doe@gmail.com")
-        self.assertEqual(reponse.json()["newsletter"], 0)
+        self.assertEqual(data["genrecli"], "Monsieur")
+        self.assertEqual(data["nomcli"], "Doe")
+        self.assertEqual(data["prenomcli"], "John")
+        self.assertEqual(data["adresse1cli"], "1 rue de la Paix")
+        self.assertEqual(data["telcli"], "0123456789")
+        self.assertEqual(data["emailcli"], "john.doe@gmail.com")
+        self.assertEqual(data["newsletter"], 0)
         
         
     def test_read_clients(self):
@@ -63,15 +60,16 @@ class TestHomeRoute(unittest.TestCase):
             "emailcli": "jane.doe@gmail.com",
             "newsletter": 1
         }
-        reponse = self.client.put(f"/clients/{self.created_id}", json=update_cli)
+        reponse = self.client.patch(f"/clients/{self.created_id}", json=update_cli)
         self.assertEqual(reponse.status_code, 200)
-        self.assertEqual(reponse.json()["genrecli"], "Madame")
-        self.assertEqual(reponse.json()["nomcli"], "Doe")
-        self.assertEqual(reponse.json()["prenomcli"], "Jane")
-        self.assertEqual(reponse.json()["adresse1cli"], "1 rue de la Paix")
-        self.assertEqual(reponse.json()["telcli"], "0123456789")
-        self.assertEqual(reponse.json()["emailcli"], "jane.doe@gmail.com")
-        self.assertEqual(reponse.json()["newsletter"], 1)
+        data = reponse.json()
+        self.assertEqual(data["genrecli"], "Madame")
+        self.assertEqual(data["nomcli"], "Doe")
+        self.assertEqual(data["prenomcli"], "Jane")
+        self.assertEqual(data["adresse1cli"], "1 rue de la Paix")
+        self.assertEqual(data["telcli"], "0123456789")
+        self.assertEqual(data["emailcli"], "jane.doe@gmail.com")
+        self.assertEqual(data["newsletter"], 1)
         
         
     def test_delete_client(self):

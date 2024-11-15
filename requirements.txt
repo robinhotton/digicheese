@@ -1,6 +1,7 @@
 fastapi
 uvicorn
 sqlalchemy
+pydantic[email]
 pymysql
 python-dotenv
 httpx

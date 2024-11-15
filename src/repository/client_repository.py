@@ -1,28 +1,33 @@
 from sqlalchemy.orm import Session
 from ..models import Client
-from ..schemas import ClientCreate, ClientUpdate
 
 
 class ClientRepository:
-
     def get_all_clients(self, db: Session):
         return db.query(Client).all()
 
 
     def get_client_by_id(self, db: Session, client_id: int):
-        return db.query(Client).filter(Client.codcli == client_id).first()
+        return db.query(Client).filter(Client.client_id == client_id).first()
+    
+    
+    def get_client_by_email(self, db: Session, email: str):
+        return db.query(Client).filter(Client.email == email).first()
+    
+    
+    def get_client_by_name(self, db: Session, nom: str, prenom: str):
+        return db.query(Client).filter(Client.nom == nom, Client.prenom == prenom).first()
 
 
-    def create_client(self, db: Session, client_data: ClientCreate):
-        new_client = Client(**client_data.model_dump())
+    def create_client(self, db: Session, client_data: dict):
+        new_client = Client(**client_data)
         db.add(new_client)
         db.commit()
         db.refresh(new_client)
         return new_client
 
 
-    def update_client(self, db: Session, client_id: int, client_data: ClientUpdate):
-        client_data = client_data.model_dump(exclude_unset=True)
+    def update_client(self, db: Session, client_id: int, client_data: dict):
         client = self.get_client_by_id(db, client_id)
         
         if client:

@@ -1,13 +1,28 @@
+from sqlalchemy import Column, Float, Integer, String, CheckConstraint
 from src.models.base_model import Base
-from sqlalchemy import Column, Integer, String, Numeric
-
 
 class Objet(Base):
-	__tablename__ = "t_objet"
+    __tablename__ = "t_objet"
 
-	codobj = Column(Integer,primary_key=True)
-	libobj = Column(String(50), default=None)
-	tailleobj = Column(String(50), default=None)
-	puobj = Column(Numeric, default=0.0000)
-	poidsobj = Column(Numeric, default=0.0000)
-	points = Column(Integer, default=0)
+	# Champs obligatoires
+    objet_id = Column(Integer, primary_key=True)
+    libelle = Column(String(50), nullable=False)
+    
+    # nullable ou obligatoire avec une valeur par défaut
+    taille = Column(String(50), nullable=True, default=None)
+    prix_unitaire = Column(Float, nullable=False, default=0.0)
+    poids = Column(Float, nullable=False, default=0.0)
+    points = Column(Integer, nullable=False, default=0)
+
+    # Contrainte sur le prix, poids et points : ces valeurs ne doivent pas être négatives
+    __table_args__ = (
+        CheckConstraint('prix_unitaire >= 0', name='check_prix_unitaire'),
+        CheckConstraint('poids >= 0', name='check_poids'),
+        CheckConstraint('points >= 0', name='check_points'),
+    )
+
+    def __repr__(self):
+        return (
+            f"<Objet(objet_id={self.objet_id}, libelle='{self.libelle}', taille='{self.taille}', "
+            f"prix_unitaire={self.prix_unitaire}, poids={self.poids}, points={self.points})>"
+        )
