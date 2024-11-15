@@ -14,7 +14,7 @@ cli_data = {
     "email": "john.doe@gmail.com",
     "newsletter": 0
 }
-update_cli ={
+update_cli = {
     "genre": "F",
     "nom": "Doe",
     "prenom": "Jane",
@@ -24,6 +24,15 @@ update_cli ={
     "newsletter": 1
 }
 
+def assert_client_data(data, expected_data):
+    """Fonction pour vérifier que les données du client dans la réponse sont correctes."""
+    assert data["genre"] == expected_data["genre"]
+    assert data["nom"] == expected_data["nom"].upper()
+    assert data["prenom"] == expected_data["prenom"].capitalize()
+    assert data["adresse_ligne1"] == expected_data["adresse_ligne1"]
+    assert data["tel"] == expected_data["tel"]
+    assert data["email"] == expected_data["email"].lower()
+    assert data["newsletter"] == expected_data["newsletter"]
 
 def test_get_all_clients():
     response = client.get("/client/")
@@ -33,19 +42,13 @@ def test_get_all_clients():
 
 def test_create_client():
     global created_id  # Nous déclarons global car nous voulons modifier cette variable à l'échelle globale
-    reponse = client.post("/client/", json=cli_data)
+    response = client.post("/client/", json=cli_data)
     
     # Comparer les données du client créées avec celles renvoyées par l'API
-    data = reponse.json()
+    data = response.json()
     created_id = data["client_id"]  # Assigner le client_id retourné
-    assert reponse.status_code == 200
-    assert data["genre"] == cli_data["genre"]
-    assert data["nom"] == cli_data["nom"].upper()
-    assert data["prenom"] == cli_data["prenom"].capitalize()
-    assert data["adresse_ligne1"] == cli_data["adresse_ligne1"]
-    assert data["tel"] == cli_data["tel"]
-    assert data["email"] == cli_data["email"].lower()
-    assert data["newsletter"] == cli_data["newsletter"]
+    assert response.status_code == 200
+    assert_client_data(data, cli_data)
 
 
 def test_get_client_by_id():
@@ -57,13 +60,7 @@ def test_get_client_by_id():
     
     # Comparer les données du client créées avec celles renvoyées par l'API
     assert data["client_id"] == created_id
-    assert data["genre"] == cli_data["genre"]
-    assert data["nom"] == cli_data["nom"].upper()
-    assert data["prenom"] == cli_data["prenom"].capitalize()
-    assert data["adresse_ligne1"] == cli_data["adresse_ligne1"]
-    assert data["tel"] == cli_data["tel"]
-    assert data["email"] == cli_data["email"].lower()
-    assert data["newsletter"] == cli_data["newsletter"]
+    assert_client_data(data, cli_data)
 
 
 def test_get_client_by_name():
@@ -75,15 +72,9 @@ def test_get_client_by_name():
     
     # Comparer les données du client créées avec celles renvoyées par l'API
     assert data["client_id"] == created_id
-    assert data["genre"] == cli_data["genre"]
-    assert data["nom"] == cli_data["nom"].upper()
-    assert data["prenom"] == cli_data["prenom"].capitalize()
-    assert data["adresse_ligne1"] == cli_data["adresse_ligne1"]
-    assert data["tel"] == cli_data["tel"]
-    assert data["email"] == cli_data["email"].lower()
-    assert data["newsletter"] == cli_data["newsletter"]
-    
-    
+    assert_client_data(data, cli_data)
+
+
 def test_get_client_by_email():
     assert created_id is not None, "Le client n'a pas été créé avant d'essayer de le récupérer"
     
@@ -93,15 +84,9 @@ def test_get_client_by_email():
     
     # Comparer les données du client créées avec celles renvoyées par l'API
     assert data["client_id"] == created_id
-    assert data["genre"] == cli_data["genre"]
-    assert data["nom"] == cli_data["nom"].upper()
-    assert data["prenom"] == cli_data["prenom"].capitalize()
-    assert data["adresse_ligne1"] == cli_data["adresse_ligne1"]
-    assert data["tel"] == cli_data["tel"]
-    assert data["email"] == cli_data["email"].lower()
-    assert data["newsletter"] == cli_data["newsletter"]
-
-
+    assert_client_data(data, cli_data)
+    
+    
 def test_patch_client():
     assert created_id is not None, "Le client n'a pas été créé avant d'essayer de le mettre à jour"
     
@@ -111,13 +96,7 @@ def test_patch_client():
     # Comparer les données du client mises à jour avec celles renvoyées par l'API
     data = response.json()
     assert data["client_id"] == created_id
-    assert data["genre"] == update_cli["genre"]
-    assert data["nom"] == update_cli["nom"].upper()
-    assert data["prenom"] == update_cli["prenom"].capitalize()
-    assert data["adresse_ligne1"] == update_cli["adresse_ligne1"]
-    assert data["tel"] == update_cli["tel"]
-    assert data["email"] == update_cli["email"].lower()
-    assert data["newsletter"] == update_cli["newsletter"]
+    assert_client_data(data, update_cli)
 
 
 def test_delete_client():
